@@ -3,30 +3,15 @@ require 'bundler/setup'
 require 'capybara/cucumber'
 require 'capybara-screenshot'
 require 'selenium-webdriver'
+require 'pry'
 
-SERVER_URL  ||= ENV['SERVER_URL']
-WEB_BROWSER ||= :chrome
-
-# Local development
-Capybara.register_driver WEB_BROWSER do |app|
-  Capybara::Selenium::Driver.new(app, browser: WEB_BROWSER)
+Capybara.register_driver :selenium do |app|
+  @driver = Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
+
+Capybara.javascript_driver = :chrome
 
 Capybara.configure do |config|
-  config.default_driver = WEB_BROWSER
-  config.app_host = SERVER_URL
-end
-
-Capybara.save_and_open_page_path = ENV['SCREENSHOT_PATH']
-
-Capybara::Screenshot.register_driver(WEB_BROWSER) do |driver, path|
-  driver.browser.save_screenshot(path)
-end
-
-# HOOKS
-Before do |scenario|
-  visit SERVER_URL
-end
-
-After do |scenario|
+  config.default_max_wait_time = 10 # seconds
+  config.default_driver        = :selenium
 end

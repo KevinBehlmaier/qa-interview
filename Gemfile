@@ -16,5 +16,7 @@ group :test do
   gem 'cucumber'
   gem 'headless'
   gem 'selenium-webdriver'
+  gem 'pry'
+  gem 'rspec'
+  gem 'rspec-expectations'
 end
-
